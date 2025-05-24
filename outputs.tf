@@ -1,4 +1,4 @@
-# output "subnet_id" {
-#   description = "The ID of the created subnet."
-#   value       = module.network.subnet_id
-# }
+output "subnet_id" {
+  description = "The ID of the created subnet."
+  value       = module.network.subnet_id
+}
