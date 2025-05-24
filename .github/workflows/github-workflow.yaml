@@ -1,49 +1,49 @@
-# # This workflow authenticates to Azure using OIDC, runs Terraform plan on push, and auto-applies on PR merge to main.
+# This workflow authenticates to Azure using OIDC, runs Terraform plan on push, and auto-applies on PR merge to main.
 
-# name: Terraform Azure GitOps
+name: Terraform Azure GitOps
 
-# on:
-#   push:
-#     branches:
-#       - '**'
-#   pull_request:
-#     branches:
-#       - main
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches:
+      - main
 
-# permissions:
-#   id-token: write
-#   contents: read
+permissions:
+  id-token: write
+  contents: read
 
-# jobs:
-#   terraform:
-#     runs-on: ubuntu-latest
-#     environment: production
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-#       - name: Azure Login
-#         uses: azure/login@v2
-#         with:
-#           client-id: ${{ secrets.AZURE_CLIENT_ID }}
-#           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-#           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-#       - name: Setup Terraform
-#         uses: hashicorp/setup-terraform@v3
-#         with:
-#           terraform_version: 1.7.5
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
 
-#       - name: Terraform Init
-#         run: terraform init
+      - name: Terraform Init
+        run: terraform init
 
-#       - name: Terraform Validate
-#         run: terraform validate
+      - name: Terraform Validate
+        run: terraform validate
 
-#       - name: Terraform Plan
-#         if: github.event_name == 'push'
-#         run: terraform plan
+      - name: Terraform Plan
+        if: github.event_name == 'push'
+        run: terraform plan
 
-#       - name: Terraform Apply
-#         if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
-#         run: terraform apply -auto-approve
+      - name: Terraform Apply
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve

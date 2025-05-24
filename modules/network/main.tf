@@ -18,14 +18,3 @@ resource "azurerm_subnet" "main" {
   virtual_network_name = azurerm_virtual_network.main.name
   address_prefixes     = [var.subnet_prefix]
 }
-
-output "subnet_id" {
-  value = azurerm_subnet.main.id
-}
-
-variable "resource_group_name" {}
-variable "location" {}
-variable "vnet_name" {}
-variable "subnet_name" {}
-variable "address_space" {}
-variable "subnet_prefix" {}
