@@ -25,7 +25,7 @@ variable "subnet_name" {
 variable "address_space" {
   description = "Address space for the Virtual Network."
   type        = string
-  default     = "192.168.1.0/16"
+  default     = "192.168.0.0/16"
 }
 
 variable "subnet_prefix" {
