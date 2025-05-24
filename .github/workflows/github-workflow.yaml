@@ -1,49 +1,62 @@
-# This workflow authenticates to Azure using OIDC, runs Terraform plan on push, and auto-applies on PR merge to main.
+# name: 'Terraform Azure Policy CI/CD'
 
-name: Terraform Azure GitOps
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+#   workflow_dispatch:
 
-on:
-  push:
-    branches:
-      - '**'
-  pull_request:
-    branches:
-      - main
+# permissions:
+#   id-token: write
+#   contents: read
 
-permissions:
-  id-token: write
-  contents: read
+# jobs:
+#   terraform:
+#     name: 'Terraform'
+#     runs-on: ubuntu-latest
+    
+#     env:
+#       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+#       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+#       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#       ARM_USE_OIDC: true
+    
+#     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
+#     defaults:
+#       run:
+#         shell: bash
 
-jobs:
-  terraform:
-    runs-on: ubuntu-latest
-    environment: production
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#     # Checkout the repository to the GitHub Actions runner
+#     - name: Checkout
+#       uses: actions/checkout@v3
 
-      - name: Azure Login
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+#     # Install the latest version of Terraform CLI
+#     - name: Setup Terraform
+#       uses: hashicorp/setup-terraform@v2
+#       with:
+#         terraform_version: 1.6.0
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.7.5
+#     # Initialize a new or existing Terraform working directory
+#     - name: Terraform Init
+#       run: terraform init
 
-      - name: Terraform Init
-        run: terraform init
+#     # Checks that all Terraform configuration files adhere to a canonical format
+#     - name: Terraform Format
+#       run: terraform fmt -check
 
-      - name: Terraform Validate
-        run: terraform validate
+#     # Validate terraform configuration
+#     - name: Terraform Validate
+#       run: terraform validate
 
-      - name: Terraform Plan
-        if: github.event_name == 'push'
-        run: terraform plan
+#     # Generates an execution plan for Terraform
+#     - name: Terraform Plan
+#       if: github.event_name == 'pull_request'
+#       run: terraform plan -no-color
+#       continue-on-error: true
 
-      - name: Terraform Apply
-        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
-        run: terraform apply -auto-approve
+#     # Apply Terraform configuration if PR is merged or workflow is manually triggered
+#     - name: Terraform Apply
+#       if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+#       run: terraform apply -auto-approve
