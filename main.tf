@@ -1,4 +1,6 @@
-# # Terraform module for Azure Resource Group, VNET, and Subnet
+# Terraform root module
+
+# Terraform module for Azure Resource Group, VNET, and Subnet
 
 # module "network" {
 #   source              = "./modules/network"
@@ -9,3 +11,12 @@
 #   address_space       = var.address_space
 #   subnet_prefix       = var.subnet_prefix
 # }
+
+module "storage" {
+  source = "./modules/az-storage"
+
+  name      = var.storage_account_name
+  location  = var.location
+  parent_id = var.resource_group_id
+  tags      = var.tags
+}
