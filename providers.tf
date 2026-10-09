@@ -8,7 +8,7 @@ terraform {
     }
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.30"
+      version = "~> 4.00" # 4.01 , 4.02, 4.31, 4.32 4.55
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -33,7 +33,9 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    subscription_id = var.subscription_id
+  }
 }
 
 provider "azuread" {
