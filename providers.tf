@@ -1,4 +1,29 @@
 terraform {
+  required_version = ">= 1.10.0"
+
+  required_providers {
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.11"
+    }
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 4.00" # 4.01 , 4.02, 4.31, 4.32 4.55
+    }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 3.4"
+    }
+    modtm = {
+      source  = "Azure/modtm"
+      version = "~> 0.3"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = ">= 3.5, < 4.0"
+    }
+  }
+
   backend "azurerm" {
     resource_group_name  = "tfstate-rg"
     storage_account_name = "tfstatefuturecloud2405"
@@ -8,7 +33,9 @@ terraform {
 }
 
 provider "azurerm" {
-  features {}
+  features {
+    subscription_id = var.subscription_id
+  }
 }
 
 provider "azuread" {

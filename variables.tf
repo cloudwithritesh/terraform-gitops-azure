@@ -1,3 +1,24 @@
+variable "resource_group_id" {
+  description = "Resource ID of the resource group that will contain the storage account."
+  type        = string
+}
+
+variable "location" {
+  description = "Azure region for the storage account."
+  type        = string
+}
+
+variable "storage_account_name" {
+  description = "Globally unique name of the Azure Storage Account."
+  type        = string
+}
+
+variable "tags" {
+  description = "Tags to apply to the storage account."
+  type        = map(string)
+  default     = {}
+}
+
 # variable "resource_group_name" {
 #   description = "Name of the Azure Resource Group."
 #   type        = string
