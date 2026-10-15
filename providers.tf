@@ -1,9 +1,18 @@
 terraform {
-  backend "azurerm" {
-    resource_group_name  = "tfstate-rg"
-    storage_account_name = "tfstatefuturecloud2405"
-    container_name       = "tfstate"
-    key                  = "terraform.tfstate"
+  # backend "azurerm" {
+  #   resource_group_name  = "tfstate-rg"
+  #   storage_account_name = "tfstatefuturecloud2405"
+  #   container_name       = "tfstate"
+  #   key                  = "terraform.tfstate"
+  # }
+  cloud {
+    organization = "cloudwithritesh-org"
+
+    workspaces {
+      name = "terraform-gitops-azure"
+      # OR use tags instead of a fixed name:
+      # tags = ["prod", "networking"]
+    }
   }
 }
 
