@@ -1,0 +1,17 @@
+variable "environment" {
+  type        = string
+  description = "Selected in the No-Code UI"
+  default     = "Development"
+}
+
+locals {
+  # Dynamically assign the target Azure Subscription ID based on environment
+  target_subscription = var.environment == "Production" ? "11111111-blank-prod-id" : "22222222-blank-dev-id"
+}
+
+provider "azurerm" {
+  features {}
+  
+  # The provider reads the dynamically calculated local value
+  subscription_id = local.target_subscription
+}
